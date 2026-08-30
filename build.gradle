@@ -67,7 +67,7 @@ dependencies {
 }
 
 processResources {
-    filesMatching("META-INF/mods.toml") { expand properties }
+    filesMatching("META-INF/mods.toml") { expand project.properties }
 }
 
 jar {
