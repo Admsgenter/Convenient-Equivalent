@@ -1,0 +1,7 @@
+{
+    "category.projecte": "ProjectE",
+    "config.projecte.auto_charge": "Auto Charge",
+    "config.projecte.auto_charge.description": "Auto add EMC into EMC-consuming items from your storage",
+    "tooltip.projecte.enabled": "Enabled",
+    "utility.projecte.transmutation": "Transmutation"
+}
