@@ -13,7 +13,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(KnowledgeImpl.Provider.class)
 public abstract class KnowledgeImpl$ProviderMixin {
-    @Unique private static Player CvE$玩家;
+    @Unique
+    private static Player CvE$玩家;
 
     @Redirect(at = @At(target = "Lmoze_intel/projecte/impl/capability/KnowledgeImpl$DefaultImpl;", value = "NEW"), method = "<init>", remap = false)
     private static KnowledgeImpl.DefaultImpl init(Player 玩家) {

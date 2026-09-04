@@ -82,5 +82,5 @@ public class 空间知识 implements IKnowledgeProvider {
     public void syncInputAndLocks(ServerPlayer 玩家, List<Integer> 变化, TargetUpdateType 目标) { 部分源.syncInputAndLocks(玩家, 变化, 目标); }
 
     @Override
-    public void syncKnowledgeChange(ServerPlayer 玩家, ItemInfo 变化, boolean 学习) {}
+    public void syncKnowledgeChange(ServerPlayer 玩家, ItemInfo 变化, boolean 学习) { }
 }

@@ -7,11 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
@@ -23,14 +19,22 @@ import java.util.Objects;
  */
 @Mixin(ItemInfo.class)
 public abstract class ItemInfoMixin implements 物品键 {
-    @Final @Shadow(remap = false) private Item item;
-    @Final @Shadow(remap = false) private CompoundTag nbt;
+    @Final
+    @Shadow(remap = false)
+    private Item item;
+    @Final
+    @Shadow(remap = false)
+    private CompoundTag nbt;
 
-    @Unique private int CvE$ID = -1;
-    @Unique private Component CvE$描述;
-    @Unique private ItemStack CvE$物品组;
+    @Unique
+    private int CvE$ID = -1;
+    @Unique
+    private Component CvE$描述;
+    @Unique
+    private ItemStack CvE$物品组;
 
-    @Shadow(remap = false) public abstract ItemStack createStack();
+    @Shadow(remap = false)
+    public abstract ItemStack createStack();
 
     @Redirect(at = @At(target = "Lnet/minecraft/nbt/CompoundTag;isEmpty()Z", value = "INVOKE"), method = "<init>")
     private boolean init(CompoundTag 标签) { return 物品键.空标签(标签); }
@@ -66,7 +70,7 @@ public abstract class ItemInfoMixin implements 物品键 {
     @Overwrite(remap = false)
     public boolean equals(Object 实例) {
         return this == 实例 || 实例 instanceof 物品键 键 && item == 键.物品() &&
-                               Objects.equals(nbt, 键.标签()) && 键.空能力();
+            Objects.equals(nbt, 键.标签()) && 键.空能力();
     }
 
     /**

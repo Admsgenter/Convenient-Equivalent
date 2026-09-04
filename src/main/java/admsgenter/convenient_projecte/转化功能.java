@@ -1,12 +1,12 @@
 package admsgenter.convenient_projecte;
 
 import admsgenter.convenient_projecte.mixin.EMCMappingHandlerAccessor;
-import admsgenter.convenient_storage.api.工具.可变整数;
-import admsgenter.convenient_storage.api.工具.数据.复合存储器;
-import admsgenter.convenient_storage.api.工具.检索表;
+import admsgenter.convenient_storage.api.工具.物品组容器;
+import admsgenter.convenient_storage.api.数据.复合存储器;
 import admsgenter.convenient_storage.api.检索键.检索键工具;
 import admsgenter.convenient_storage.api.检索键.物品键;
 import admsgenter.convenient_storage.api.注册;
+import admsgenter.convenient_storage.api.网络.处理器;
 import admsgenter.convenient_storage.api.网络.数据包类型;
 import admsgenter.convenient_storage.api.网络.数据包频道;
 import admsgenter.convenient_storage.api.网络.数据编码器;
@@ -18,6 +18,8 @@ import admsgenter.convenient_storage.api.页面.数据.面板数据;
 import admsgenter.convenient_storage.api.页面.栏位.功能栏位;
 import admsgenter.convenient_storage.common.页面.功能.配置功能;
 import admsgenter.convenient_storage.lib.函数.判断;
+import admsgenter.convenient_storage.lib.工具.可变整数;
+import admsgenter.convenient_storage.lib.工具.检索表;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Sets;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -39,7 +41,7 @@ import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.fml.ModList;
+import net.minecraft.world.level.ItemLike;
 
 import java.math.BigInteger;
 import java.util.Collections;
@@ -49,33 +51,28 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-import static admsgenter.convenient_storage.api.网络.数据编码器.整数组;
-
 public class 转化功能 extends 数据功能 implements 面板数据, 配置功能, 外部存储<物品键, ItemStack> {
     public static final int 容器尺寸 = 4;
     public static final ResourceLocation ID = PECore.rl("transmutation");
-    public static final 面板页面<转化功能> 页面 = 面板页面.注册功能(转化功能::new, 转化功能::new, ID, new ItemStack(PEItems.PHILOSOPHERS_STONE), false);
+    public static final 面板页面<转化功能> 页面 = new 面板页面.构建器<转化功能>(ID, 物品组容器.物品((ItemLike) PEItems.PHILOSOPHERS_STONE)).读取(转化功能::new, 转化功能::new).构建功能();
     private static final BigInteger 最大整数 = BigInteger.valueOf(Integer.MAX_VALUE), 最大长整数 = BigInteger.valueOf(Long.MAX_VALUE);
-    private static final ItemInfo 知识之书 = ItemInfo.fromItem(PEItems.TOME_OF_KNOWLEDGE);
     private static final 数据编码器<ItemInfo> 信息编码器 = new 数据编码器<>((数据, 信息) -> {
         数据.writeId(BuiltInRegistries.ITEM, 信息.getItem());
         数据.writeNbt(信息.getNBT());
     }, 数据 -> ItemInfo.fromItem(数据.readById(BuiltInRegistries.ITEM), 数据.readAnySizeNbt()));
-    private static final 数据包频道 频道 = 数据包频道.创建(ResourceLocation.fromNamespaceAndPath("cve", ""), ModList.get().getModContainerById(便捷等价.MODID).get().getModInfo().getVersion());
-    private static final 数据包类型 同步转化 = 频道.主线程((数据, 信息) -> {
-        转化功能.页面.get().EMC.设置(数据.<int[]>下一参数());
+    private static final 数据包频道 频道 = new 数据包频道(ResourceLocation.fromNamespaceAndPath("cve", "")).注册(便捷等价.MODID);
+    private static final 数据包类型.一<byte[]> 同步转化 = 频道.创建(处理器.主线程((数据, 信息) -> {
+        转化功能.页面.get().EMC.设置(数据.A);
         if(信息.玩家().containerMenu instanceof TransmutationContainer 菜单) 菜单.transmutationInventory.updateClientTargets();
-    }, 整数组);
-    private static final 数据包类型 学习知识 = 频道.主线程((数据, 信息) -> {
-        ItemInfo 物品信息 = 数据.下一参数();
-        if((物品信息.getItem() == PEItems.TOME_OF_KNOWLEDGE.asItem()? 转化功能.页面.get().学习全部():转化功能.页面.get().学习(物品信息)) &&
-           信息.玩家().containerMenu instanceof TransmutationContainer 菜单) 菜单.transmutationInventory.itemLearned();
-    }, 信息编码器);
-    private static final 数据包类型 遗忘知识 = 频道.主线程((数据, 信息) -> {
-        ItemInfo 物品信息 = 数据.下一参数();
-        if((物品信息.getItem() == PEItems.TOME_OF_KNOWLEDGE.asItem()? 转化功能.页面.get().遗忘全部():转化功能.页面.get().遗忘(物品信息)) &&
-           信息.玩家().containerMenu instanceof TransmutationContainer 菜单) 菜单.transmutationInventory.itemUnlearned();
-    }, 信息编码器);
+    }), 数据编码器.字节组);
+    private static final 数据包类型.一<ItemInfo> 学习知识 = 频道.创建(处理器.主线程((数据, 信息) -> {
+        if((数据.A.getItem() == PEItems.TOME_OF_KNOWLEDGE.asItem()? 转化功能.页面.get().学习全部():转化功能.页面.get().学习(数据.A)) &&
+            信息.玩家().containerMenu instanceof TransmutationContainer 菜单) 菜单.transmutationInventory.itemLearned();
+    }), 信息编码器);
+    private static final 数据包类型.一<ItemInfo> 遗忘知识 = 频道.创建(处理器.主线程((数据, 信息) -> {
+        if((数据.A.getItem() == PEItems.TOME_OF_KNOWLEDGE.asItem()? 转化功能.页面.get().遗忘全部():转化功能.页面.get().遗忘(数据.A)) &&
+            信息.玩家().containerMenu instanceof TransmutationContainer 菜单) 菜单.transmutationInventory.itemUnlearned();
+    }), 信息编码器);
     public final Set<ItemInfo> 存储集, 无效集 = new ObjectOpenHashSet<>(10, .625F);
     public final 可变整数 EMC = new 可变整数();
     public boolean 全部;
@@ -133,6 +130,7 @@ public class 转化功能 extends 数据功能 implements 面板数据, 配置�
 
     public boolean 学习全部() {
         if(全部) return false;
+        ItemInfo 知识之书 = ItemInfo.fromItem(PEItems.TOME_OF_KNOWLEDGE);
         空间().同步数据(知识之书, 学习知识.创建(知识之书));
         return 全部 = true;
     }
@@ -147,13 +145,14 @@ public class 转化功能 extends 数据功能 implements 面板数据, 配置�
 
     public boolean 遗忘全部() {
         if(!全部) return false;
+        ItemInfo 知识之书 = ItemInfo.fromItem(PEItems.TOME_OF_KNOWLEDGE);
         空间().同步数据(知识之书, 遗忘知识.创建(知识之书));
         全部 = false;
         return true;
     }
 
     public void 值变化() {
-        空间().同步数据(同步转化.创建(new Object[]{EMC.值()}));
+        空间().同步数据(同步转化.创建(EMC.字节()));
         long 长整数值 = EMC.longValue();
         if(长整数值 < 最大价值) {
             最大价值 = 0L;
@@ -242,7 +241,7 @@ public class 转化功能 extends 数据功能 implements 面板数据, 配置�
     }
 
     @Override
-    public Set<物品键> 存储集() { return 启用? (Set<物品键>) (Set<?>) Sets.filter(内部存储集(), Predicates.<Object>not(((Set<Object>)(Set<?>)无效集)::contains)):Collections.emptySet(); }
+    public Set<物品键> 存储集() { return 启用? (Set<物品键>) (Set<?>) Sets.filter(内部存储集(), Predicates.<Object>not(((Set<Object>) (Set<?>) 无效集)::contains)):Collections.emptySet(); }
 
     @Override
     public int 添加栏位(UnaryOperator<Slot> 物品栏位, UnaryOperator<DataSlot> 数据栏位, int 存储坐标) {

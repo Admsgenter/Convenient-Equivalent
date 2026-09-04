@@ -11,7 +11,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod(便捷等价.MODID)
@@ -30,6 +29,5 @@ public class 便捷等价 {
                 GUI.drawString(客户端.字体, TransmutationEMCFormatter.formatEMC(转化功能.页面.get().EMC), 34, 46, 0x404040, false);
             }, new 容器按钮(33, 3, Component.translatable("tooltip.projecte.enabled"), 转化功能.页面));
         });
-        信息.getModEventBus().addListener((final FMLCommonSetupEvent 事件) -> 转化功能.页面.getClass());
     }
 }

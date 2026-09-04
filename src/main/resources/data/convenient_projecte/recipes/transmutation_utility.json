@@ -1,5 +1,7 @@
 {
-    "type": "convenient_storage:smithing_tablet",
-    "utility": "projecte:transmutation",
-    "material": {"item": "projecte:transmutation_tablet"}
+  "type": "convenient_storage:smithing_tablet",
+  "utility": "projecte:transmutation",
+  "material": {
+    "item": "projecte:transmutation_tablet"
+  }
 }

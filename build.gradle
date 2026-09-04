@@ -61,8 +61,9 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    implementation "curse.maven:convenient-storage-1309336:8758149"
+    implementation "curse.maven:convenient-storage-1309336:8807473"
     implementation fg.deobf("curse.maven:projecte-226410:4901949")
+    compileOnly fg.deobf("mezz.jei:jei-1.20.1-common-api:15.21.0.148")
     runtimeOnly fg.deobf("mezz.jei:jei-1.20.1-forge:15.21.0.148")
 }
 
@@ -72,4 +73,9 @@ processResources {
 
 jar {
     finalizedBy 'reobfJar'
+}
+
+tasks.register("devJar", Jar) {
+    archiveClassifier = "dev"
+    from(sourceSets.main.output, sourceSets.main.java)
 }
