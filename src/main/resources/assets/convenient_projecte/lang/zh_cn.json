@@ -1,8 +1,8 @@
 {
-  "category.projecte": "等价交换",
-  "config.projecte.auto_charge": "自动充能",
-  "config.projecte.auto_charge.description": "自动将存储中的EMC填充至消耗EMC的物品内。",
-  "tooltip.convenient_projecte.recipe.world_transmute": "世界转化: %s×%s",
-  "tooltip.projecte.enabled": "启用",
-  "utility.projecte.transmutation": "转化"
+    "category.projecte": "等价交换",
+    "config.projecte.auto_charge": "自动充能",
+    "config.projecte.auto_charge.description": "自动将存储中的EMC填充至消耗EMC的物品内。",
+    "tooltip.convenient_equivalent.recipe.world_transmute": "世界转化: %s×%s",
+    "tooltip.projecte.enabled": "启用",
+    "utility.projecte.transmutation": "转化"
 }

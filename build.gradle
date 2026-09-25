@@ -1,81 +1,55 @@
-buildscript {
-    repositories {
-        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
-    }
-}
-
 plugins {
-    id 'eclipse'
+    id 'java-library'
+    id 'maven-publish'
     id 'idea'
-    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
+    id 'net.neoforged.moddev' version '2.0.140'
 }
 
-apply plugin: 'org.spongepowered.mixin'
+version = "0.0.0"
+group = "admsgenter"
+base.archivesName = "Convenient Equivalent-1.21.1"
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
-group = mod_group_id
-version = mod_version
-base.archivesName = mod_name+'-'+minecraft_version
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+neoForge {
+    version = "21.1.221"
 
-minecraft {
-    mappings channel: mapping_channel, version: mapping_version
-    copyIdeResources = true
+    parchment {
+        minecraftVersion = "1.21"
+        mappingsVersion = "2024.07.07"
+    }
 
     runs {
+        client { client() }
+
+        server { server() }
+
         configureEach {
-            workingDirectory file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        client {
-        }
-
-        server {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            jvmArgument '-Dmixin.env.disableRefMap=true'
+            logLevel = org.slf4j.event.Level.DEBUG
         }
     }
 
-    accessTransformer file("lib/accesstransformer.cfg")
-}
-
-mixin {
-    add sourceSets.main, "${mod_id}.refmap.json"
-    config "${mod_id}.mixins.json"
+    mods {
+        "convenient_equivalent" {
+            sourceSet sourceSets.main
+        }
+    }
 }
 
 repositories {
-    maven { url "https://maven.blamejared.com/" }
     maven { url "https://cursemaven.com" }
+    maven { url "https://maven.blamejared.com/" }
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    implementation "curse.maven:convenient-storage-1309336:8807473"
-    implementation fg.deobf("curse.maven:projecte-226410:4901949")
-    compileOnly fg.deobf("mezz.jei:jei-1.20.1-common-api:15.21.0.148")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.20.1-forge:15.21.0.148")
-}
-
-processResources {
-    filesMatching("META-INF/mods.toml") { expand project.properties }
-}
-
-jar {
-    finalizedBy 'reobfJar'
+    compileOnly "mezz.jei:jei-1.21.1-common-api:19.27.0.340"
+    runtimeOnly "mezz.jei:jei-1.21.1-neoforge:19.27.0.340"
+    implementation "curse.maven:convenient-storage-1309336:8878182"
+    implementation "curse.maven:projecte-226410:6611984"
 }
 
 tasks.register("devJar", Jar) {
     archiveClassifier = "dev"
-    from(sourceSets.main.output, sourceSets.main.java)
+    from(sourceSets.main.java)
 }

@@ -1,0 +1,9 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "admsgenter.convenient_equivalent.mixin",
+    "compatibilityLevel": "JAVA_8",
+    "refmap": "convenient_equivalent.refmap.json",
+    "mixins": [ "EMCHelperMixin", "EMCMappingHandlerAccessor", "ItemInfoMixin", "PECoreMixin", "PlayerEventsMixin" ],
+    "injectors": { "defaultRequire": 1 }
+}

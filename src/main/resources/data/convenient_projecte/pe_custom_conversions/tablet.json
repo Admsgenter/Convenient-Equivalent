@@ -1,14 +1,20 @@
 {
-  "comment": "Removes EMC values of Storage Tablet.",
-  "values": {
-    "conversion": [
-      {
-        "count": 2,
-        "ingredients": [
-          "convenient_storage:storage_tablet"
-        ],
-        "output": "convenient_storage:storage_tablet"
-      }
-    ]
-  }
+    "comment": "Removes EMC values of Storage Tablet.",
+    "values": {
+        "conversion": [
+            {
+                "count": 2,
+                "ingredients": [
+                    {
+                        "type": "projecte:item",
+                        "id": "convenient_storage:storage_tablet"
+                    }
+                ],
+                "output": {
+                    "type": "projecte:item",
+                    "id": "convenient_storage:storage_tablet"
+                }
+            }
+        ]
+    }
 }
